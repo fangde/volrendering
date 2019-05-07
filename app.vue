@@ -1,25 +1,41 @@
 <template>
-<canvas>
+<canvas ref="render" width=100 height=100>
 
 </canvas>
 </template>
 <script>
-import {GPU} from 'gpu.js'
-console.log(GPU)
 
-const gpu=new GPU();
-const settings={
-    output:{x:128}
-}
-const kernel=gpu.createKernel(
-    function(){
-        return this.thread.x+10.0;
-    },settings
-)
 
-console.log(kernel())
+import {Create_Render,GPU} from './render.js'
 
 export default {
+
+    name: "GpuRender",
+
+    data(){
+        return {
+        render:null
+        }
+
+    },
+    mounted(){
+
+        let canvas=this.$refs.render
+        console.log('canvas',canvas)
+        const gpu=new GPU({
+            mode:"webgl",
+            canvas:canvas})
+        this.render=Create_Render(gpu)
+        this.render()
+
+    },
+    methods:{
+        draw(){
+            
+            this.render()
+            
+        }
+    }
     
 }
 </script>
